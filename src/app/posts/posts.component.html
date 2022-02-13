@@ -1,0 +1,10 @@
+<form [formGroup]="postFormGroup">
+  <h4>Title</h4>
+   <tui-input formControlName="title"></tui-input>
+  <br>
+  <h4>Content</h4>
+   <tui-input formControlName="content"></tui-input>
+  <br>
+</form>
+
+<button tuiButton (click)="sendPost()">Send Post</button>
