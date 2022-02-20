@@ -4,6 +4,15 @@ const bodyParser = require('body-parser');
 const Post = require('./models/post');
 const app = express();
 
+const mongoose = require('mongoose');
+
+mongoose.connect("mongodb+srv://tikhon:369174@cluster0.pdeld.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+  .then(() => {
+    console.log('Logged in database');
+  }).catch(() => {
+  console.log('connection failed');
+});
+
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
@@ -24,6 +33,7 @@ app.post('/api/posts', (req, res, next) => {
     title: req.body.title,
     content: req.body.content,
   });
+  post.save();
   console.log(post);
   res.status(201).json({
     message: 'Все окей'
@@ -31,12 +41,20 @@ app.post('/api/posts', (req, res, next) => {
 })
 
 app.use('/api/posts', (req, res, next) => {
-  const posts = [
-    {id: 1, title: 'title', content: 'content'},
-    {id: 2, title: 'title', content: 'content'},
-    {id: 3, title: 'title', content: 'content'},
-  ];
-  res.status(200) .json(posts);
+  Post.find().then(documents => {
+    console.log(documents);
+    res.status(200).json({
+      message: 'Posts fetching successfully',
+      posts: documents,
+    });
+  });
+})
+
+app.delete('/api/post/:id', (req, res, next) => {
+  Post.deleteOne({_id: req.params.id}).then(result => {
+    console.log(result);
+    res.status(200).json({message: 'Post deleted'});
+  });
 })
 
 module.exports = app;

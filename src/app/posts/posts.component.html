@@ -7,4 +7,13 @@
   <br>
 </form>
 
+<ul>
+  <li *ngFor="let post of posts$ | async">{{post.title}}
+  <button (click)="deletePost(post.id)">
+    deletePost
+  </button></li>
+</ul>
+
+<br>
+
 <button tuiButton (click)="sendPost()">Send Post</button>
